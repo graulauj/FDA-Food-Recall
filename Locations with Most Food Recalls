@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+
+#Imported csv file from the FDA Food Enforcement
+df = pd.read_csv('/Users/Jo-El/Desktop/Python_Test/FDA_food_enforcement.csv')
+
+df.info()
+
+df.shape
+
+df.describe()
+
+# Filtered to show only the terminated recalls
+df1 = df.loc[df.status == 'Terminated']
+df1.head(20)
+
+# Grouped the top 25 products that have been recalled and their respective cities
+
+df1.loc[df1.status == 'Terminated'].groupby('product_description').agg({'city':'unique'}).head(25)
+
+# Grouped the bottom 25 products that have been recalled and their respective cities
+
+df1.loc[df1.status == 'Terminated'].groupby('product_description').agg({'city':'unique'}).tail(25)
+
+# Grouped the cities and the amount of recalls each had
+
+df2 = df1.loc[df1.status == 'Terminated'].groupby('city').agg({'classification':'count'})
+
+# Sorted the data to be ordered in descending order by classification
+
+sdf2 = df2.sort_values(by = 'classification', ascending = False)
+
+# Top 20 of the cities
+sdf2.head(20)
